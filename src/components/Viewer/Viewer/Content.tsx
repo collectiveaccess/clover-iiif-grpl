@@ -53,13 +53,15 @@ const ViewerContent: React.FC<ViewerContentProps> = ({
   const isAside = informationPanel?.renderAbout && isInformationOpen;
 
   const isForcedAside =
-    informationPanel?.renderAnnotation &&
-    annotationResources.length > 0 &&
-    !informationPanel.open;
+    (informationPanel?.renderAnnotation &&
+      annotationResources.length > 0 &&
+      !informationPanel.open) ||
+    contentSearchResource;
 
   return (
     <Content
       className="clover-viewer-content"
+      style={{ height: configOptions.canvasHeight ?? "100%" }}
       data-testid="clover-viewer-content"
     >
       <Main>
@@ -76,13 +78,13 @@ const ViewerContent: React.FC<ViewerContentProps> = ({
           </CollapsibleTrigger>
         )}
 
-        {items.length > 1 && (
+        {items.length > 1 && isInformationOpen && (
           <MediaWrapper className="clover-viewer-media-wrapper">
             <Media items={items} activeItem={0} />
           </MediaWrapper>
         )}
       </Main>
-      {(isAside || isForcedAside) && (
+      {(isAside || isForcedAside) && isInformationOpen && (
         <Aside>
           <CollapsibleContent>
             <InformationPanel
