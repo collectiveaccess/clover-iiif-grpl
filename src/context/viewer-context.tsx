@@ -33,6 +33,7 @@ export type ViewerConfigOptions = {
     renderSupplementing?: boolean;
     renderToggle?: boolean;
     renderAnnotation?: boolean;
+    toggleLabel?: string;
     vtt?: {
       autoScroll?: AutoScrollOptions | AutoScrollSettings | boolean;
     };
