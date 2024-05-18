@@ -12,6 +12,8 @@ const Toggle = () => {
   const dispatch: any = useViewerDispatch();
 
   const [checked, setChecked] = useState(configOptions?.informationPanel?.open);
+  const toggleLabel =
+    configOptions?.informationPanel?.toggleLabel ?? "More information";
 
   useEffect(() => {
     dispatch({
@@ -23,7 +25,7 @@ const Toggle = () => {
   return (
     <StyledToggle>
       <Label htmlFor="information-toggle" css={checked ? { opacity: "1" } : {}}>
-        More Information
+        {toggleLabel}
       </Label>
       <StyledSwitch
         checked={checked}
