@@ -159,7 +159,6 @@ export const InformationPanel: React.FC<NavigatorProps> = ({
       className="clover-viewer-information-panel"
     >
       <List aria-label="select chapter" data-testid="information-panel-list">
-        {renderAbout && <Trigger value="manifest-about">About</Trigger>}
         {renderContentSearch && contentSearchResource && (
           <Trigger value="manifest-content-search">
             <Label label={contentSearchResource.label as InternationalString} />
@@ -184,13 +183,10 @@ export const InformationPanel: React.FC<NavigatorProps> = ({
               />
             </Trigger>
           ))}
+
+        {renderAbout && <Trigger value="manifest-about">About</Trigger>}
       </List>
       <Scroll handleScroll={handleScroll}>
-        {renderAbout && (
-          <Content value="manifest-about">
-            <Information />
-          </Content>
-        )}
         {renderContentSearch && contentSearchResource && (
           <Content value="manifest-content-search">
             <ContentSearch
@@ -215,6 +211,11 @@ export const InformationPanel: React.FC<NavigatorProps> = ({
           pluginsWithInfoPanel.map((plugin, i) =>
             renderPluginInformationPanel(plugin, i),
           )}
+        {renderAbout && (
+          <Content value="manifest-about">
+            <Information />
+          </Content>
+        )}
       </Scroll>
     </Wrapper>
   );
