@@ -10,6 +10,7 @@ import {
   ViewerContextStore,
   useViewerDispatch,
   useViewerState,
+  type PluginConfig,
 } from "src/context/viewer-context";
 
 import AnnotationPage from "src/components/Viewer/InformationPanel/Annotation/Page";
@@ -22,6 +23,7 @@ import {
   CanvasNormalized,
 } from "@iiif/presentation-3";
 import { Label } from "src/components/Primitives";
+import { setupPlugins } from "src/lib/plugin-helpers";
 
 const UserScrollTimeout = 1500; // 1500ms without a user-generated scroll event reverts to auto-scrolling
 
@@ -47,8 +49,12 @@ export const InformationPanel: React.FC<NavigatorProps> = ({
   const {
     isAutoScrolling,
     configOptions: { informationPanel },
+    configOptions,
     isUserScrolling,
     vault,
+    plugins,
+    activeManifest,
+    openSeadragonViewer,
   } = viewerState;
 
   const canvas: CanvasNormalized = vault.get({
@@ -61,6 +67,31 @@ export const InformationPanel: React.FC<NavigatorProps> = ({
   const renderAbout = informationPanel?.renderAbout;
   const renderAnnotation = informationPanel?.renderAnnotation;
   const renderContentSearch = informationPanel?.renderContentSearch;
+
+  const { pluginsWithInfoPanel } = setupPlugins(plugins);
+
+  function renderPluginInformationPanel(plugin: PluginConfig, i: number) {
+    const PluginInformationPanelComponent = plugin?.informationPanel
+      ?.component as unknown as React.ElementType;
+
+    if (PluginInformationPanelComponent === undefined) {
+      return <></>;
+    }
+
+    return (
+      <Content key={i} value={plugin.id}>
+        <PluginInformationPanelComponent
+          {...plugin?.informationPanel?.componentProps}
+          activeManifest={activeManifest}
+          canvas={canvas}
+          viewerConfigOptions={configOptions}
+          openSeadragonViewer={openSeadragonViewer}
+          useViewerDispatch={useViewerDispatch}
+          useViewerState={useViewerState}
+        />
+      </Content>
+    );
+  }
 
   useEffect(() => {
     if (activeResource) {
@@ -94,6 +125,7 @@ export const InformationPanel: React.FC<NavigatorProps> = ({
     annotationResources,
     contentSearchResource,
     canvas?.annotations,
+    plugins,
   ]);
 
   function handleScroll() {
@@ -140,6 +172,18 @@ export const InformationPanel: React.FC<NavigatorProps> = ({
               <Label label={resource.label as InternationalString} />
             </Trigger>
           ))}
+
+        {pluginsWithInfoPanel &&
+          pluginsWithInfoPanel.map((plugin, i) => (
+            <Trigger key={i} value={plugin.id}>
+              <Label
+                label={
+                  plugin.informationPanel
+                    ?.label as unknown as InternationalString
+                }
+              />
+            </Trigger>
+          ))}
       </List>
       <Scroll handleScroll={handleScroll}>
         {renderAbout && (
@@ -166,6 +210,11 @@ export const InformationPanel: React.FC<NavigatorProps> = ({
               </Content>
             );
           })}
+
+        {pluginsWithInfoPanel &&
+          pluginsWithInfoPanel.map((plugin, i) =>
+            renderPluginInformationPanel(plugin, i),
+          )}
       </Scroll>
     </Wrapper>
   );

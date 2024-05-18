@@ -70,6 +70,7 @@ describe("Player component", () => {
           isInformationOpen: false,
           isLoaded: false,
           vault,
+          plugins: [],
           contentSearchVault: new Vault(),
           openSeadragonViewer: null,
         }}
@@ -131,6 +132,7 @@ describe("Player component", () => {
           isInformationOpen: false,
           isLoaded: false,
           vault,
+          plugins: [],
           openSeadragonViewer: null,
           contentSearchVault: new Vault(),
         }}
@@ -189,6 +191,7 @@ describe("Player component", () => {
           isInformationOpen: false,
           isLoaded: false,
           vault,
+          plugins: [],
           contentSearchVault: new Vault(),
           openSeadragonViewer: null,
         }}
