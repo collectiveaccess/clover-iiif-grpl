@@ -29,6 +29,7 @@ interface AnnotationFlattened extends Annotation {
 
 type ContentSearchQuery = {
   q: string;
+  exact?: string;
   motivation?: string;
   date?: string;
   user?: string;

@@ -21,6 +21,7 @@ const SearchContent: React.FC<Props> = ({
   setLoading,
 }) => {
   const [searchTerms, setSearchTerms] = useState<string | undefined>();
+  const [exactMode, setExactMode] = useState<string | undefined>("1");
 
   const viewerState: ViewerContextStore = useViewerState();
   const { contentSearchVault, openSeadragonViewer, configOptions } =
@@ -45,6 +46,7 @@ const SearchContent: React.FC<Props> = ({
 
     getContentSearchResources(contentSearchVault, searchServiceUrl, tabLabel, {
       q: searchTerms,
+      exact: exactMode,
     }).then((resources) => {
       setContentSearchResource(resources);
       setLoading(false);
@@ -54,6 +56,11 @@ const SearchContent: React.FC<Props> = ({
   const handleChange = (e: any) => {
     e.preventDefault();
     setSearchTerms(e.target.value);
+  };
+
+  const handleExact = (e: any) => {
+    console.log("set exact", e.target.checked);
+    setExactMode(e.target.checked ? "1" : "0");
   };
 
   return (
@@ -75,6 +82,14 @@ const SearchContent: React.FC<Props> = ({
             </svg>
           </ButtonStyled>
         </Form.Submit>
+
+        <Form.Field name="exactMode" onChange={handleExact}>
+          <Form.Control asChild>
+            <p style={{ margin: "0 0 0 10px" }}>
+              <input type="checkbox" value="1" name="exactMode" /> Exact?
+            </p>
+          </Form.Control>
+        </Form.Field>
       </Form.Root>
     </FormStyled>
   );
