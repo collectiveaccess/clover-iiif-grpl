@@ -17,6 +17,8 @@ import AnnotationPage from "src/components/Viewer/InformationPanel/Annotation/Pa
 import ContentSearch from "src/components/Viewer/InformationPanel/ContentSearch/ContentSearch";
 import { AnnotationResources, AnnotationResource } from "src/types/annotations";
 import Information from "src/components/Viewer/InformationPanel/About/About";
+import { getLabelAsString } from "src/lib/label-helpers";
+
 import {
   InternationalString,
   AnnotationPageNormalized,
@@ -55,13 +57,13 @@ export const InformationPanel: React.FC<NavigatorProps> = ({
     plugins,
     activeManifest,
     openSeadragonViewer,
+    informationPanelCounts,
   } = viewerState;
 
   const canvas: CanvasNormalized = vault.get({
     id: activeCanvas,
     type: "Canvas",
   });
-
   const [activeResource, setActiveResource] = useState<string>();
 
   const renderAbout = informationPanel?.renderAbout;
@@ -173,16 +175,20 @@ export const InformationPanel: React.FC<NavigatorProps> = ({
           ))}
 
         {pluginsWithInfoPanel &&
-          pluginsWithInfoPanel.map((plugin, i) => (
-            <Trigger key={i} value={plugin.id}>
-              <Label
-                label={
-                  plugin.informationPanel
-                    ?.label as unknown as InternationalString
-                }
-              />
-            </Trigger>
-          ))}
+          pluginsWithInfoPanel.map((plugin, i) => {
+            const l = getLabelAsString(
+              plugin.informationPanel?.label as unknown as InternationalString,
+            );
+            const c = informationPanelCounts[plugin.id]
+              ? " (" + informationPanelCounts[plugin.id] + ")"
+              : "";
+            const lbl = { none: [l + c] } as unknown as InternationalString;
+            return (
+              <Trigger key={i} value={plugin.id}>
+                <Label label={lbl} />
+              </Trigger>
+            );
+          })}
 
         {renderAbout && <Trigger value="manifest-about">About</Trigger>}
       </List>

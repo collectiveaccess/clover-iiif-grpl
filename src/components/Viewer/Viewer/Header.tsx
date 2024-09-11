@@ -15,6 +15,7 @@ import { Label } from "src/components/Primitives";
 import { Popover } from "src/components/UI";
 import React from "react";
 import Toggle from "./Toggle";
+import ShowPagesToggle from "./ShowPagesToggle";
 import ViewerDownload from "./Download";
 import { media } from "src/styles/stitches.config";
 import { useMediaQuery } from "src/hooks/useMediaQuery";
@@ -28,8 +29,13 @@ const ViewerHeader: React.FC<Props> = ({ manifestId, manifestLabel }) => {
   const viewerState: ViewerContextStore = useViewerState();
   const { collection, configOptions } = viewerState;
 
-  const { informationPanel, showDownload, showIIIFBadge, showTitle } =
-    configOptions;
+  const {
+    informationPanel,
+    showDownload,
+    showIIIFBadge,
+    showTitle,
+    headerNavigation,
+  } = configOptions;
 
   /**
    * Determine if header options should be rendered.
@@ -45,8 +51,15 @@ const ViewerHeader: React.FC<Props> = ({ manifestId, manifestLabel }) => {
       ) : (
         <ManifestLabel className={!showTitle ? "visually-hidden" : ""}>
           {showTitle && <Label label={manifestLabel} className="label" />}
+          {headerNavigation && (
+            <span
+              className="headerNavigation"
+              dangerouslySetInnerHTML={{ __html: headerNavigation }}
+            ></span>
+          )}
         </ManifestLabel>
       )}
+
       {hasOptions && (
         <HeaderOptions>
           {showDownload && <ViewerDownload />}
@@ -88,6 +101,7 @@ const ViewerHeader: React.FC<Props> = ({ manifestId, manifestLabel }) => {
             </Popover>
           )}
           {informationPanel?.renderToggle && !isSmallViewport && <Toggle />}
+          <ShowPagesToggle />
         </HeaderOptions>
       )}
     </Header>

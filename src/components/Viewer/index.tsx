@@ -67,6 +67,7 @@ const CloverViewer: React.FC<CloverViewerProps> = ({
         plugins,
         isAutoScrollEnabled: autoScrollOptions.enabled,
         isInformationOpen: Boolean(options?.informationPanel?.open),
+        showPageNavigation: true,
         vault: new Vault({
           customFetcher: (url: string) =>
             getRequest(url, {
@@ -215,6 +216,26 @@ const RenderViewer: React.FC<CloverViewerProps> = ({
   if (manifest["items"].length === 0) {
     console.log(`The IIIF manifest ${iiifContent} does not contain canvases.`);
     return <></>;
+  }
+
+  /**
+   * Load specified page if initialPage option is set
+   * [Added by Whirl-i-Gig on 12 June 2024 for GRPL project]
+   */
+  const initialPage: number = options?.initialPage ?? 0;
+  if (
+    initialPage > 0 &&
+    manifest?.items &&
+    manifest.items[initialPage - 1] &&
+    activeCanvas !== manifest.items[initialPage - 1].id
+  ) {
+    dispatch({
+      type: "updateActiveCanvas",
+      canvasId: manifest.items[initialPage - 1].id,
+    });
+    if (options) {
+      options.initialPage = undefined;
+    }
   }
 
   /**

@@ -25,8 +25,13 @@ export type ViewerConfigOptions = {
   contentSearch?: {
     searchResultsLimit?: number;
     overlays?: OverlayOptions;
+    zoomToFirst?: boolean;
   };
   ignoreCaptionLabels?: string[];
+  pages?: {
+    show?: boolean;
+    toggleLabel?: string;
+  };
   informationPanel?: {
     open?: boolean;
     renderAbout?: boolean;
@@ -43,6 +48,7 @@ export type ViewerConfigOptions = {
   openSeadragon?: OpenSeadragonOptions;
   requestHeaders?: IncomingHttpHeaders;
   showDownload?: boolean;
+  headerNavigation?: string;
   showIIIFBadge?: boolean;
   showTitle?: boolean;
   withCredentials?: boolean;
@@ -55,6 +61,8 @@ export type ViewerConfigOptions = {
       moreResults?: string;
     };
   };
+  initialSearch?: string;
+  initialPage?: number;
 };
 
 export type OverlayOptions = {
@@ -87,6 +95,7 @@ const defaultConfigOptions = {
   canvasHeight: "500px",
   contentSearch: {
     searchResultsLimit: 20,
+    zoomToFirst: false,
     overlays: {
       backgroundColor: "#ff6666",
       borderColor: "#990000",
@@ -98,6 +107,10 @@ const defaultConfigOptions = {
     },
   },
   ignoreCaptionLabels: [],
+  pages: {
+    show: true,
+    toggleLabel: "Pages",
+  },
   informationPanel: {
     vtt: {
       autoScroll: {
@@ -165,6 +178,7 @@ export interface ViewerContextStore {
   isAutoScrollEnabled?: boolean;
   isAutoScrolling?: boolean;
   isInformationOpen: boolean;
+  showPageNavigation: boolean;
   isLoaded: boolean;
   isUserScrolling?: number | undefined;
   vault: Vault;
@@ -172,6 +186,7 @@ export interface ViewerContextStore {
   openSeadragonViewer: OpenSeadragon.Viewer | null;
   openSeadragonId?: string;
   viewerId?: string;
+  informationPanelCounts: object;
 }
 
 export interface ViewerAction {
@@ -182,6 +197,7 @@ export interface ViewerAction {
   isAutoScrollEnabled: boolean;
   isAutoScrolling: boolean;
   isInformationOpen: boolean;
+  showPageNavigation: boolean;
   isLoaded: boolean;
   isUserScrolling: number | undefined;
   manifestId: string;
@@ -190,6 +206,8 @@ export interface ViewerAction {
   contentSearchVault: Vault;
   openSeadragonViewer: OpenSeadragon.Viewer;
   viewerId: string;
+  panel: string;
+  count: number;
 }
 
 export function expandAutoScrollOptions(
@@ -230,12 +248,14 @@ export const defaultState: ViewerContextStore = {
   isAutoScrollEnabled: expandedAutoScrollOptions.enabled,
   isAutoScrolling: false,
   isInformationOpen: defaultConfigOptions?.informationPanel?.open,
+  showPageNavigation: defaultConfigOptions?.pages?.show,
   isLoaded: false,
   isUserScrolling: undefined,
   vault: new Vault(),
   contentSearchVault: new Vault(),
   openSeadragonViewer: null,
   viewerId: uuidv4(),
+  informationPanelCounts: {},
 };
 
 const ViewerStateContext =
@@ -297,6 +317,12 @@ function viewerReducer(state: ViewerContextStore, action: ViewerAction) {
         isInformationOpen: action.isInformationOpen,
       };
     }
+    case "updateShowPageNavigation": {
+      return {
+        ...state,
+        showPageNavigation: action.showPageNavigation,
+      };
+    }
     case "updateIsLoaded": {
       return {
         ...state,
@@ -319,6 +345,14 @@ function viewerReducer(state: ViewerContextStore, action: ViewerAction) {
       return {
         ...state,
         viewerId: action.viewerId,
+      };
+    }
+    case "updateInformationPanelCount": {
+      const c = state.informationPanelCounts ?? {};
+      c[action.panel] = action.count;
+      return {
+        ...state,
+        informationPanelCounts: c,
       };
     }
     default: {

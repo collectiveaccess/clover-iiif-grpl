@@ -42,7 +42,8 @@ const ViewerContent: React.FC<ViewerContentProps> = ({
   items,
   painting,
 }) => {
-  const { isInformationOpen, configOptions } = useViewerState();
+  const { isInformationOpen, showPageNavigation, configOptions } =
+    useViewerState();
   const { informationPanel } = configOptions;
 
   /**
@@ -78,7 +79,7 @@ const ViewerContent: React.FC<ViewerContentProps> = ({
           </CollapsibleTrigger>
         )}
 
-        {items.length > 1 && isInformationOpen && (
+        {items.length > 1 && showPageNavigation && (
           <MediaWrapper className="clover-viewer-media-wrapper">
             <Media items={items} activeItem={0} />
           </MediaWrapper>

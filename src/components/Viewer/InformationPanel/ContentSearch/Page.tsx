@@ -8,6 +8,8 @@ import { List, ResultsHeader, ResultsFooter } from "./Item.styled";
 import { ViewerContextStore, useViewerState } from "src/context/viewer-context";
 import { getLabel } from "src/hooks/use-iiif";
 
+let zoomedTo = false;
+
 type Props = {
   annotationPage: AnnotationPageNormalized;
 };
@@ -22,8 +24,9 @@ export const ContentSearchPage: React.FC<Props> = ({ annotationPage }) => {
   >();
 
   const searchResultsLimit = configOptions.contentSearch?.searchResultsLimit;
-  const searchText = configOptions.localeText?.contentSearch;
+  const zoomToFirst = configOptions.contentSearch?.zoomToFirst ? true : false;
 
+  const searchText = configOptions.localeText?.contentSearch;
   function formatAnnotationPage(annotationPage: AnnotationPageNormalized) {
     const groupedAnnotations: GroupedAnnotations = {};
     annotationPage.items.forEach((item) => {
@@ -42,6 +45,13 @@ export const ContentSearchPage: React.FC<Props> = ({ annotationPage }) => {
         groupedAnnotations[label] = [];
       }
       groupedAnnotations[label].push(annotation);
+
+      if (!zoomedTo && zoomToFirst) {
+        if (typeof annotation.target === "string") {
+          setActiveContentSearchTarget(annotation.target);
+          zoomedTo = true;
+        }
+      }
     });
     return groupedAnnotations;
   }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as Form from "@radix-ui/react-form";
 import { AnnotationPageNormalized } from "@iiif/presentation-3";
 import { getContentSearchResources } from "src/hooks/use-iiif";
@@ -20,16 +20,22 @@ const SearchContent: React.FC<Props> = ({
   setContentSearchResource,
   setLoading,
 }) => {
-  const [searchTerms, setSearchTerms] = useState<string | undefined>();
-  const [exactMode, setExactMode] = useState<string | undefined>("1");
-
   const viewerState: ViewerContextStore = useViewerState();
   const { contentSearchVault, openSeadragonViewer, configOptions } =
     viewerState;
   const searchText = configOptions.localeText?.contentSearch;
 
+  const initialSearch = configOptions.initialSearch;
+
+  const [searchTerms, setSearchTerms] = useState<string | undefined>(
+    initialSearch,
+  );
+  const [exactMode, setExactMode] = useState<string | undefined>("1");
+
   async function searchSubmitHandler(e) {
-    e.preventDefault();
+    if (e) {
+      e.preventDefault();
+    }
     const tabLabel = searchText?.tabLabel as string;
 
     if (!openSeadragonViewer) return;
@@ -59,9 +65,16 @@ const SearchContent: React.FC<Props> = ({
   };
 
   const handleExact = (e: any) => {
-    console.log("set exact", e.target.checked);
     setExactMode(e.target.checked ? "1" : "0");
   };
+
+  // Force load of initial search, if configured, on viewer load
+  useEffect(() => {
+    if (initialSearch) {
+      setSearchTerms(initialSearch);
+      searchSubmitHandler(null);
+    }
+  }, [openSeadragonViewer]);
 
   return (
     <FormStyled>
