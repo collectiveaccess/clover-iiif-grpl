@@ -201,6 +201,7 @@ const Viewer: React.FC<ViewerProps> = ({
           onOpenChange={setInformationOpen}
         >
           <ViewerHeader
+            manifest={manifest}
             manifestLabel={manifest.label as InternationalString}
             manifestId={manifest.id}
           />

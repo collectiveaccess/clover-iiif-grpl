@@ -5,15 +5,19 @@ import {
   ManifestLabel,
   PopoverContent,
 } from "./Header.styled";
-import { ViewerContextStore, useViewerState } from "src/context/viewer-context";
+import {
+  ViewerContextStore,
+  useViewerDispatch,
+  useViewerState,
+} from "src/context/viewer-context";
 
 import Collection from "src/components/Viewer/Collection/Collection";
 import CopyText from "src/components/Viewer/CopyText";
 import IIIFBadge from "src/components/Viewer/Viewer/IIIFBadge";
-import { InternationalString } from "@iiif/presentation-3";
+import { InternationalString, ManifestNormalized } from "@iiif/presentation-3";
 import { Label } from "src/components/Primitives";
 import { Popover } from "src/components/UI";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Toggle from "./Toggle";
 import ShowPagesToggle from "./ShowPagesToggle";
 import ViewerDownload from "./Download";
@@ -21,13 +25,25 @@ import { media } from "src/styles/stitches.config";
 import { useMediaQuery } from "src/hooks/useMediaQuery";
 
 interface Props {
+  manifest: ManifestNormalized;
   manifestId: string;
   manifestLabel: InternationalString;
 }
 
-const ViewerHeader: React.FC<Props> = ({ manifestId, manifestLabel }) => {
+const ViewerHeader: React.FC<Props> = ({
+  manifest,
+  manifestId,
+  manifestLabel,
+}) => {
   const viewerState: ViewerContextStore = useViewerState();
   const { collection, configOptions } = viewerState;
+  const dispatch: any = useViewerDispatch();
+
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+
+  useEffect(() => {
+    setActiveIndex(0);
+  }, []);
 
   const {
     informationPanel,
@@ -57,9 +73,41 @@ const ViewerHeader: React.FC<Props> = ({ manifestId, manifestLabel }) => {
               dangerouslySetInnerHTML={{ __html: headerNavigation }}
             ></span>
           )}
+
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              if (!manifest.items[activeIndex - 1]) {
+                return;
+              }
+              const prevId = manifest.items[activeIndex - 1].id;
+              setActiveIndex(activeIndex - 1);
+              dispatch({
+                type: "updateActiveCanvas",
+                canvasId: prevId,
+              });
+            }}
+          >
+            Previous page
+          </button>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              if (!manifest.items[activeIndex + 1]) {
+                return;
+              }
+              const nextId = manifest.items[activeIndex + 1].id;
+              setActiveIndex(activeIndex + 1);
+              dispatch({
+                type: "updateActiveCanvas",
+                canvasId: nextId,
+              });
+            }}
+          >
+            Next page
+          </button>
         </ManifestLabel>
       )}
-
       {hasOptions && (
         <HeaderOptions>
           {showDownload && <ViewerDownload />}
