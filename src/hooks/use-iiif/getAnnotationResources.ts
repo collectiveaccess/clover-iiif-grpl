@@ -49,7 +49,7 @@ export const getContentSearchResources = async (
 
   // TODO: handle other query params (e.g. motivation, date, user) defined in
   // Content Search spec
-  const url = `${searchUrl}?q=${searchQuery["q"].trim()}&exact=${searchQuery["exact"]}`;
+  const url = `${searchUrl}?q=${searchQuery["q"].trim()}`;
 
   let annotationPage;
   try {
