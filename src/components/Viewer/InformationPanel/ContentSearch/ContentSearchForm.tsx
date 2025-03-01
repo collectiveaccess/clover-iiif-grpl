@@ -30,7 +30,6 @@ const SearchContent: React.FC<Props> = ({
   const [searchTerms, setSearchTerms] = useState<string | undefined>(
     initialSearch,
   );
-  const [exactMode, setExactMode] = useState<string | undefined>("1");
 
   async function searchSubmitHandler(e) {
     if (e) {
@@ -52,7 +51,6 @@ const SearchContent: React.FC<Props> = ({
 
     getContentSearchResources(contentSearchVault, searchServiceUrl, tabLabel, {
       q: searchTerms,
-      exact: exactMode,
     }).then((resources) => {
       setContentSearchResource(resources);
       setLoading(false);
@@ -62,10 +60,6 @@ const SearchContent: React.FC<Props> = ({
   const handleChange = (e: any) => {
     e.preventDefault();
     setSearchTerms(e.target.value);
-  };
-
-  const handleExact = (e: any) => {
-    setExactMode(e.target.checked ? "1" : "0");
   };
 
   // Force load of initial search, if configured, on viewer load
@@ -95,14 +89,6 @@ const SearchContent: React.FC<Props> = ({
             </svg>
           </ButtonStyled>
         </Form.Submit>
-
-        <Form.Field name="exactMode" onChange={handleExact}>
-          <Form.Control asChild>
-            <p style={{ margin: "0 0 0 10px" }}>
-              <input type="checkbox" value="1" name="exactMode" /> Exact?
-            </p>
-          </Form.Control>
-        </Form.Field>
       </Form.Root>
     </FormStyled>
   );
