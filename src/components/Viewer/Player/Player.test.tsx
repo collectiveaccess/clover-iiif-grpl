@@ -73,6 +73,8 @@ describe("Player component", () => {
           plugins: [],
           contentSearchVault: new Vault(),
           openSeadragonViewer: null,
+          informationPanelCounts: {},
+          showPageNavigation: false,
         }}
       >
         <Player {...props} />
@@ -135,6 +137,8 @@ describe("Player component", () => {
           plugins: [],
           openSeadragonViewer: null,
           contentSearchVault: new Vault(),
+          showPageNavigation: false,
+          informationPanelCounts: {},
         }}
       >
         <Player {...props} />
@@ -194,6 +198,8 @@ describe("Player component", () => {
           plugins: [],
           contentSearchVault: new Vault(),
           openSeadragonViewer: null,
+          showPageNavigation: false,
+          informationPanelCounts: {},
         }}
       >
         <Player {...props} />
