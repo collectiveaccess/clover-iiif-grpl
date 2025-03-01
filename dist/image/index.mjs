@@ -1,18 +1,18 @@
-import M from "openseadragon";
+import P from "openseadragon";
 import "@iiif/vault-helpers";
-import { ErrorBoundary as R } from "react-error-boundary";
-import { createStitches as W } from "@stitches/react";
-import r, { useState as k, useRef as D, useEffect as w } from "react";
-import { Vault as z } from "@iiif/vault";
-import { v4 as V } from "uuid";
+import { ErrorBoundary as W } from "react-error-boundary";
+import { createStitches as N } from "@stitches/react";
+import r, { useState as z, useRef as D, useEffect as w } from "react";
+import { Vault as k } from "@iiif/vault";
+import { v4 as T } from "uuid";
 let h = window.OpenSeadragon;
-if (!h && (h = M, !h))
+if (!h && (h = P, !h))
   throw new Error("OpenSeadragon is missing.");
 const $ = "http://www.w3.org/2000/svg";
 h.Viewer && (h.Viewer.prototype.svgOverlay = function() {
-  return this._svgOverlayInfo ? this._svgOverlayInfo : (this._svgOverlayInfo = new P(this), this._svgOverlayInfo);
+  return this._svgOverlayInfo ? this._svgOverlayInfo : (this._svgOverlayInfo = new V(this), this._svgOverlayInfo);
 });
-const P = function(e) {
+const V = function(e) {
   const t = this;
   this._viewer = e, this._containerWidth = 0, this._containerHeight = 0, this._svg = document.createElementNS($, "svg"), this._svg.style.position = "absolute", this._svg.style.left = 0, this._svg.style.top = 0, this._svg.style.width = "100%", this._svg.style.height = "100%", this._viewer.canvas.appendChild(this._svg), this._node = document.createElementNS($, "g"), this._svg.appendChild(this._node), this._viewer.addHandler("animation", function() {
     t.resize();
@@ -26,7 +26,7 @@ const P = function(e) {
     t.resize();
   }), this.resize();
 };
-P.prototype = {
+V.prototype = {
   // ----------
   node: function() {
     return this._node;
@@ -50,14 +50,14 @@ P.prototype = {
     }).setTracking(!0);
   }
 };
-const N = (e) => fetch(`${e.replace(/\/$/, "")}/info.json`).then((t) => t.json()).then((t) => t).catch((t) => {
+const j = (e) => fetch(`${e.replace(/\/$/, "")}/info.json`).then((t) => t.json()).then((t) => t).catch((t) => {
   console.error(
     `The IIIF tilesource ${e.replace(
       /\/$/,
       ""
     )}/info.json failed to load: ${t}`
   );
-}), j = (e) => {
+}), Z = (e) => {
   let t, o;
   if (Array.isArray(e) && (t = e[0], t)) {
     let i;
@@ -66,19 +66,19 @@ const N = (e) => fetch(`${e.replace(/\/$/, "")}/info.json`).then((t) => t.json()
   return o;
 };
 var x = /* @__PURE__ */ ((e) => (e.TiledImage = "tiledImage", e.SimpleImage = "simpleImage", e))(x || {});
-const Z = (e) => {
-  const t = Array.isArray(e == null ? void 0 : e.service) && (e == null ? void 0 : e.service.length) > 0, o = t ? j(e == null ? void 0 : e.service) : e == null ? void 0 : e.id, i = t ? x.TiledImage : x.SimpleImage;
+const U = (e) => {
+  const t = Array.isArray(e == null ? void 0 : e.service) && (e == null ? void 0 : e.service.length) > 0, o = t ? Z(e == null ? void 0 : e.service) : e == null ? void 0 : e.id, i = t ? x.TiledImage : x.SimpleImage;
   return {
     uri: o,
     imageType: i
   };
-}, U = (e, t) => {
+}, X = (e, t) => {
   const o = t ? x.TiledImage : x.SimpleImage;
   return {
     uri: e,
     imageType: o
   };
-}, y = 209, X = {
+}, y = 209, q = {
   colors: {
     /*
      * Black and dark grays in a light theme.
@@ -164,28 +164,28 @@ const Z = (e) => {
     4: "400",
     max: "999"
   }
-}, q = {
+}, Y = {
   xxs: "(max-width: 349px)",
   xs: "(max-width: 575px)",
   sm: "(max-width: 767px)",
   md: "(max-width: 991px)",
   lg: "(max-width: 90rem)",
   xl: "(min-width: calc(90rem + 1px))"
-}, { styled: m, css: Ce, keyframes: Ie, createTheme: ke } = W({
-  theme: X,
-  media: q
-}), Y = m("div", {
+}, { styled: m, css: Ie, keyframes: ze, createTheme: ke } = N({
+  theme: q,
+  media: Y
+}), G = m("div", {
   display: "flex",
   flexDirection: "column",
   alignItems: "center"
-}), G = m("p", {
+}), J = m("p", {
   fontWeight: "bold",
   fontSize: "x-large"
-}), J = m("span", {
+}), K = m("span", {
   fontSize: "medium"
-}), K = ({ error: e }) => {
+}), Q = ({ error: e }) => {
   const { message: t } = e;
-  return /* @__PURE__ */ r.createElement(Y, { role: "alert" }, /* @__PURE__ */ r.createElement(G, { "data-testid": "headline" }, "Something went wrong"), t && /* @__PURE__ */ r.createElement(J, null, `Error message: ${t}`, " "));
+  return /* @__PURE__ */ r.createElement(G, { role: "alert" }, /* @__PURE__ */ r.createElement(J, { "data-testid": "headline" }, "Something went wrong"), t && /* @__PURE__ */ r.createElement(K, null, `Error message: ${t}`, " "));
 }, S = m("div", {
   position: "absolute !important",
   zIndex: "1",
@@ -208,12 +208,12 @@ const Z = (e) => {
     width: "100px",
     height: "61.8px"
   }
-}), Q = m("div", {
+}), ee = m("div", {
   position: "relative",
   width: "100%",
   height: "100%",
   zIndex: "0"
-}), ee = m("div", {
+}), te = m("div", {
   width: "100%",
   height: "100%",
   maxHeight: "100vh",
@@ -237,7 +237,7 @@ const Z = (e) => {
       }
     }
   }
-}), te = m("button", {
+}), re = m("button", {
   display: "flex",
   height: "2rem",
   width: "2rem",
@@ -302,7 +302,7 @@ const Z = (e) => {
 }), g = ({ className: e, id: t, label: o, children: i }) => {
   const a = o.toLowerCase().replace(/\s/g, "-");
   return /* @__PURE__ */ r.createElement(
-    te,
+    re,
     {
       id: t,
       className: e,
@@ -323,7 +323,7 @@ const Z = (e) => {
       i
     )
   );
-}, re = m("div", {
+}, oe = m("div", {
   position: "absolute",
   zIndex: "1",
   top: "1rem",
@@ -351,10 +351,10 @@ const Z = (e) => {
       }
     }
   }
-}), oe = {
+}), ne = {
   behavior: "smooth",
   block: "center"
-}, u = {
+}, d = {
   annotationOverlays: {
     backgroundColor: "#6666ff",
     borderColor: "#000099",
@@ -369,6 +369,7 @@ const Z = (e) => {
   canvasHeight: "500px",
   contentSearch: {
     searchResultsLimit: 20,
+    zoomToFirst: !1,
     overlays: {
       backgroundColor: "#ff6666",
       borderColor: "#990000",
@@ -380,11 +381,15 @@ const Z = (e) => {
     }
   },
   ignoreCaptionLabels: [],
+  pages: {
+    show: !0,
+    toggleLabel: "Pages"
+  },
   informationPanel: {
     vtt: {
       autoScroll: {
         enabled: !0,
-        settings: oe
+        settings: ne
       }
     },
     open: !0,
@@ -410,13 +415,13 @@ const Z = (e) => {
     }
   }
 };
-function ne(e) {
+function ie(e) {
   let t = {
-    ...u.informationPanel.vtt.autoScroll
+    ...d.informationPanel.vtt.autoScroll
   };
-  return typeof e == "object" && (t = "enabled" in e ? e : { enabled: !0, settings: e }), e === !1 && (t.enabled = !1), ie(t.settings), t;
+  return typeof e == "object" && (t = "enabled" in e ? e : { enabled: !0, settings: e }), e === !1 && (t.enabled = !1), ae(t.settings), t;
 }
-function ie({ behavior: e, block: t }) {
+function ae({ behavior: e, block: t }) {
   const o = ["auto", "instant", "smooth"], i = ["center", "end", "nearest", "start"];
   if (!o.includes(e))
     throw TypeError(`'${e}' not in ${o.join(" | ")}`);
@@ -424,41 +429,43 @@ function ie({ behavior: e, block: t }) {
     throw TypeError(`'${t}' not in ${i.join(" | ")}`);
 }
 var A, B;
-const ae = ne(
-  (B = (A = u == null ? void 0 : u.informationPanel) == null ? void 0 : A.vtt) == null ? void 0 : B.autoScroll
+const se = ie(
+  (B = (A = d == null ? void 0 : d.informationPanel) == null ? void 0 : A.vtt) == null ? void 0 : B.autoScroll
 );
-var H;
-const T = {
+var H, M;
+const F = {
   activeCanvas: "",
   activeManifest: "",
   OSDImageLoaded: !1,
   collection: {},
-  configOptions: u,
+  configOptions: d,
   customDisplays: [],
   plugins: [],
-  isAutoScrollEnabled: ae.enabled,
+  isAutoScrollEnabled: se.enabled,
   isAutoScrolling: !1,
-  isInformationOpen: (H = u == null ? void 0 : u.informationPanel) == null ? void 0 : H.open,
+  isInformationOpen: (H = d == null ? void 0 : d.informationPanel) == null ? void 0 : H.open,
+  showPageNavigation: (M = d == null ? void 0 : d.pages) == null ? void 0 : M.show,
   isLoaded: !1,
   isUserScrolling: void 0,
-  vault: new z(),
-  contentSearchVault: new z(),
+  vault: new k(),
+  contentSearchVault: new k(),
   openSeadragonViewer: null,
-  viewerId: V()
-}, se = r.createContext(T), le = r.createContext(T);
+  viewerId: T(),
+  informationPanelCounts: {}
+}, le = r.createContext(F), ce = r.createContext(F);
 function L() {
-  const e = r.useContext(se);
+  const e = r.useContext(le);
   if (e === void 0)
     throw new Error("useViewerState must be used within a ViewerProvider");
   return e;
 }
-function F() {
-  const e = r.useContext(le);
+function R() {
+  const e = r.useContext(ce);
   if (e === void 0)
     throw new Error("useViewerDispatch must be used within a ViewerProvider");
   return e;
 }
-const ce = () => /* @__PURE__ */ r.createElement(
+const de = () => /* @__PURE__ */ r.createElement(
   "path",
   {
     strokeLinecap: "round",
@@ -466,7 +473,7 @@ const ce = () => /* @__PURE__ */ r.createElement(
     strokeWidth: "45",
     d: "M256 112v288M400 256H112"
   }
-), de = () => /* @__PURE__ */ r.createElement(
+), ue = () => /* @__PURE__ */ r.createElement(
   "path",
   {
     strokeLinecap: "round",
@@ -474,7 +481,7 @@ const ce = () => /* @__PURE__ */ r.createElement(
     strokeWidth: "45",
     d: "M400 256H112"
   }
-), ue = () => /* @__PURE__ */ r.createElement(
+), me = () => /* @__PURE__ */ r.createElement(
   "path",
   {
     fill: "none",
@@ -484,7 +491,7 @@ const ce = () => /* @__PURE__ */ r.createElement(
     strokeWidth: "32",
     d: "M432 320v112H320M421.8 421.77L304 304M80 192V80h112M90.2 90.23L208 208M320 80h112v112M421.77 90.2L304 208M192 432H80V320M90.23 421.8L208 304"
   }
-), me = () => /* @__PURE__ */ r.createElement("path", { d: "M448 440a16 16 0 01-12.61-6.15c-22.86-29.27-44.07-51.86-73.32-67C335 352.88 301 345.59 256 344.23V424a16 16 0 01-27 11.57l-176-168a16 16 0 010-23.14l176-168A16 16 0 01256 88v80.36c74.14 3.41 129.38 30.91 164.35 81.87C449.32 292.44 464 350.9 464 424a16 16 0 01-16 16z" }), O = () => /* @__PURE__ */ r.createElement(r.Fragment, null, /* @__PURE__ */ r.createElement(
+), he = () => /* @__PURE__ */ r.createElement("path", { d: "M448 440a16 16 0 01-12.61-6.15c-22.86-29.27-44.07-51.86-73.32-67C335 352.88 301 345.59 256 344.23V424a16 16 0 01-27 11.57l-176-168a16 16 0 010-23.14l176-168A16 16 0 01256 88v80.36c74.14 3.41 129.38 30.91 164.35 81.87C449.32 292.44 464 350.9 464 424a16 16 0 01-16 16z" }), O = () => /* @__PURE__ */ r.createElement(r.Fragment, null, /* @__PURE__ */ r.createElement(
   "path",
   {
     fill: "none",
@@ -493,7 +500,7 @@ const ce = () => /* @__PURE__ */ r.createElement(
     strokeWidth: "45",
     d: "M400 148l-21.12-24.57A191.43 191.43 0 00240 64C134 64 48 150 48 256s86 192 192 192a192.09 192.09 0 00181.07-128"
   }
-), /* @__PURE__ */ r.createElement("path", { d: "M464 97.42V208a16 16 0 01-16 16H337.42c-14.26 0-21.4-17.23-11.32-27.31L436.69 86.1C446.77 76 464 83.16 464 97.42z" })), he = ({
+), /* @__PURE__ */ r.createElement("path", { d: "M464 97.42V208a16 16 0 01-16 16H337.42c-14.26 0-21.4-17.23-11.32-27.31L436.69 86.1C446.77 76 464 83.16 464 97.42z" })), pe = ({
   _cloverViewerHasPlaceholder: e,
   config: t
 }) => {
@@ -510,39 +517,39 @@ const ce = () => /* @__PURE__ */ r.createElement(
   });
   function p() {
     return s.filter((c) => {
-      var d;
-      return (d = c.imageViewer) == null ? void 0 : d.menu;
-    }).map((c, d) => {
+      var u;
+      return (u = c.imageViewer) == null ? void 0 : u.menu;
+    }).map((c, u) => {
       var b, _, C, I;
       const E = (_ = (b = c.imageViewer) == null ? void 0 : b.menu) == null ? void 0 : _.component;
       return /* @__PURE__ */ r.createElement(
         E,
         {
-          key: d,
+          key: u,
           ...(I = (C = c == null ? void 0 : c.imageViewer) == null ? void 0 : C.menu) == null ? void 0 : I.componentProps,
           activeManifest: n,
           canvas: v,
           viewerConfigOptions: a,
           openSeadragonViewer: l,
-          useViewerDispatch: F,
+          useViewerDispatch: R,
           useViewerState: L
         }
       );
     });
   }
   return /* @__PURE__ */ r.createElement(
-    re,
+    oe,
     {
       "data-testid": "clover-iiif-image-openseadragon-controls",
       hasPlaceholder: e
     },
-    t.showZoomControl && /* @__PURE__ */ r.createElement(r.Fragment, null, /* @__PURE__ */ r.createElement(g, { id: t.zoomInButton, label: "zoom in" }, /* @__PURE__ */ r.createElement(ce, null)), /* @__PURE__ */ r.createElement(g, { id: t.zoomOutButton, label: "zoom out" }, /* @__PURE__ */ r.createElement(de, null))),
-    t.showFullPageControl && /* @__PURE__ */ r.createElement(g, { id: t.fullPageButton, label: "full page" }, /* @__PURE__ */ r.createElement(ue, null)),
+    t.showZoomControl && /* @__PURE__ */ r.createElement(r.Fragment, null, /* @__PURE__ */ r.createElement(g, { id: t.zoomInButton, label: "zoom in" }, /* @__PURE__ */ r.createElement(de, null)), /* @__PURE__ */ r.createElement(g, { id: t.zoomOutButton, label: "zoom out" }, /* @__PURE__ */ r.createElement(ue, null))),
+    t.showFullPageControl && /* @__PURE__ */ r.createElement(g, { id: t.fullPageButton, label: "full page" }, /* @__PURE__ */ r.createElement(me, null)),
     t.showRotationControl && /* @__PURE__ */ r.createElement(r.Fragment, null, /* @__PURE__ */ r.createElement(g, { id: t.rotateRightButton, label: "rotate right" }, /* @__PURE__ */ r.createElement(O, null)), /* @__PURE__ */ r.createElement(g, { id: t.rotateLeftButton, label: "rotate left" }, /* @__PURE__ */ r.createElement(O, null))),
-    t.showHomeControl && /* @__PURE__ */ r.createElement(g, { id: t.homeButton, label: "reset" }, /* @__PURE__ */ r.createElement(me, null)),
+    t.showHomeControl && /* @__PURE__ */ r.createElement(g, { id: t.homeButton, label: "reset" }, /* @__PURE__ */ r.createElement(he, null)),
     p()
   );
-}, pe = ({
+}, ge = ({
   ariaLabel: e,
   config: t,
   uri: o,
@@ -550,8 +557,8 @@ const ce = () => /* @__PURE__ */ r.createElement(
   imageType: a,
   openSeadragonCallback: l
 }) => {
-  const [s, f] = k(), [n, v] = k(), p = F(), c = D(!1);
-  return w(() => (c.current || (c.current = !0, n || v(M(t))), () => n == null ? void 0 : n.destroy()), []), w(() => {
+  const [s, f] = z(), [n, v] = z(), p = R(), c = D(!1);
+  return w(() => (c.current || (c.current = !0, n || v(P(t))), () => n == null ? void 0 : n.destroy()), []), w(() => {
     n && l && l(n);
   }, [n, l]), w(() => {
     n && o !== s && (n == null || n.forceRedraw(), f(o));
@@ -564,12 +571,12 @@ const ce = () => /* @__PURE__ */ r.createElement(
           });
           break;
         case "tiledImage":
-          N(s).then((d) => {
+          j(s).then((u) => {
             try {
-              if (!d)
+              if (!u)
                 throw new Error(`No tile source found for ${s}`);
               n == null || n.addTiledImage({
-                tileSource: d,
+                tileSource: u,
                 success: () => {
                   typeof p == "function" && p({
                     type: "updateOSDImageLoaded",
@@ -589,7 +596,7 @@ const ce = () => /* @__PURE__ */ r.createElement(
           break;
       }
   }, [a, s]), /* @__PURE__ */ r.createElement(
-    ee,
+    te,
     {
       className: "clover-iiif-image-openseadragon",
       "data-testid": "clover-iiif-image-openseadragon",
@@ -597,7 +604,7 @@ const ce = () => /* @__PURE__ */ r.createElement(
       hasNavigator: t.showNavigator
     },
     /* @__PURE__ */ r.createElement(
-      he,
+      pe,
       {
         _cloverViewerHasPlaceholder: i,
         config: t
@@ -611,7 +618,7 @@ const ce = () => /* @__PURE__ */ r.createElement(
       }
     ),
     /* @__PURE__ */ r.createElement(
-      Q,
+      ee,
       {
         id: t.id,
         "data-testid": "clover-iiif-image-openseadragon-viewport",
@@ -621,7 +628,7 @@ const ce = () => /* @__PURE__ */ r.createElement(
     )
   );
 };
-function ge(e) {
+function fe(e) {
   return {
     id: `openseadragon-${e}`,
     navigatorId: `openseadragon-navigator-${e}`,
@@ -646,7 +653,7 @@ function ge(e) {
     }
   };
 }
-const fe = (e, t = "none") => {
+const ve = (e, t = "none") => {
   if (!e)
     return null;
   if (typeof e == "string")
@@ -657,10 +664,10 @@ const fe = (e, t = "none") => {
       return e[o[0]];
   }
   return !e[t] || !Array.isArray(e[t]) ? null : e[t];
-}, ve = (e, t = "none", o = ", ") => {
-  const i = fe(e, t);
+}, xe = (e, t = "none", o = ", ") => {
+  const i = ve(e, t);
   return Array.isArray(i) ? i.join(`${o}`) : i;
-}, ze = ({
+}, $e = ({
   _cloverViewerHasPlaceholder: e = !1,
   body: t,
   instanceId: o,
@@ -670,24 +677,24 @@ const fe = (e, t = "none") => {
   openSeadragonCallback: s,
   openSeadragonConfig: f = {}
 }) => {
-  const n = o || V(), v = typeof a == "string" ? a : ve(a), p = {
-    ...ge(n),
+  const n = o || T(), v = typeof a == "string" ? a : xe(a), p = {
+    ...fe(n),
     ...f
-  }, { imageType: c, uri: d } = t ? Z(t) : U(l, i);
-  return d ? /* @__PURE__ */ r.createElement(R, { FallbackComponent: K }, /* @__PURE__ */ r.createElement(
-    pe,
+  }, { imageType: c, uri: u } = t ? U(t) : X(l, i);
+  return u ? /* @__PURE__ */ r.createElement(W, { FallbackComponent: Q }, /* @__PURE__ */ r.createElement(
+    ge,
     {
       _cloverViewerHasPlaceholder: e,
       ariaLabel: v,
       config: p,
       imageType: c,
       key: n,
-      uri: d,
+      uri: u,
       openSeadragonCallback: s
     }
   )) : null;
 };
 export {
-  ze as default
+  $e as default
 };
 //# sourceMappingURL=index.mjs.map

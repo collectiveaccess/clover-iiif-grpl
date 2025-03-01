@@ -20,8 +20,13 @@ export type ViewerConfigOptions = {
 	contentSearch?: {
 		searchResultsLimit?: number;
 		overlays?: OverlayOptions;
+		zoomToFirst?: boolean;
 	};
 	ignoreCaptionLabels?: string[];
+	pages?: {
+		show?: boolean;
+		toggleLabel?: string;
+	};
 	informationPanel?: {
 		open?: boolean;
 		renderAbout?: boolean;
@@ -38,6 +43,7 @@ export type ViewerConfigOptions = {
 	openSeadragon?: OpenSeadragonOptions;
 	requestHeaders?: IncomingHttpHeaders;
 	showDownload?: boolean;
+	headerNavigation?: string;
 	showIIIFBadge?: boolean;
 	showTitle?: boolean;
 	withCredentials?: boolean;
@@ -50,6 +56,8 @@ export type ViewerConfigOptions = {
 			moreResults?: string;
 		};
 	};
+	initialSearch?: string;
+	initialPage?: number;
 };
 export type OverlayOptions = {
 	backgroundColor?: string;
@@ -86,7 +94,6 @@ export type PluginConfig = {
 };
 export type ContentSearchQuery = {
 	q: string;
-	exact?: string;
 	motivation?: string;
 	date?: string;
 	user?: string;
